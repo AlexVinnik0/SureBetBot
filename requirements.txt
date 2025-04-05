@@ -1,0 +1,7 @@
+aiohttp==3.8.5
+beautifulsoup4==4.12.2
+playwright==1.39.0
+python-dotenv==1.0.0
+dataclasses==0.6
+pytest==7.4.0
+pytest-asyncio==0.21.1 
