@@ -1,0 +1,9 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+- Always refer to [README.md](mdc:README.md) for the project tech stack and context.
