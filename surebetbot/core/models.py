@@ -25,6 +25,11 @@ class MarketType(Enum):
     MONEYLINE = auto()
     CORRECT_SCORE = auto()
     PLAYER_PROPS = auto()
+    PLACE = auto()  # Horse Racing - horse to place
+    EACH_WAY = auto()  # Horse Racing - Each Way bet
+    QUINELLA = auto()  # Horse Racing - first two in any order
+    EXACTA = auto()  # Horse Racing - first two in correct order
+    TRIFECTA = auto()  # Horse Racing - first three in correct order
     OTHER = auto()
 
 

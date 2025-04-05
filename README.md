@@ -222,35 +222,29 @@ Based on testing results, we've developed enhanced scrapers focused on Sportsbet
 
 ### Running the Sportsbet Scraper
 
-To scrape soccer events from Sportsbet:
+To scrape events from Sportsbet:
 
 ```bash
 python -m surebetbot.cmd.scrape_sportsbet
 ```
 
 This will:
-1. Launch a Firefox browser (which works best with Sportsbet)
-2. Navigate to the soccer section
-3. Extract available soccer events, competitions, markets and odds
-4. Display the results in a readable format
-5. Save the collected data to JSON files in the `output/` directory
+1. Launch a browser
+2. Navigate to Sportsbet
+3. Extract available events, with best results for horse racing events
+4. Identify various sport types based on URL patterns
+5. Display the results in a readable format
+6. Save the collected data to JSON files in the `output/` directory
 
-### Soccer Navigation Testing
-
-For troubleshooting website access:
-
-```bash
-python -m surebetbot.tests.test_soccer_navigation
-```
+While the scraper was initially designed for soccer events, it has been enhanced to better support horse racing events, which have shown more reliable results in testing. The scraper automatically detects the sport type based on the URL and formats the output accordingly.
 
 ### Features of the Enhanced Sportsbet Scraper:
 
-- **Robust Navigation**: Reliably accesses the soccer section
+- **Sport Type Detection**: Automatically identifies horse racing, harness racing, greyhound racing, and other sports
+- **Customized Formatting**: Different output formats for racing events vs. team sports
 - **Multiple Selector Strategies**: Falls back to alternative selectors if primary ones fail
 - **Detailed Logging**: Comprehensive logging for troubleshooting
-- **Screenshot Capture**: Saves screenshots at each step for visual verification
-- **Error Resilience**: Gracefully handles errors and timeouts
-- **Clean Output**: Well-formatted results for easy analysis
+- **Debug Screenshots**: Captures webpage screenshots during scraping for visual debugging
 
 ### Debugging
 
