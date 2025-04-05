@@ -152,4 +152,112 @@ surebetbot/
 └── README.md
 ```
 
+---
+
+## 📋 Testing Australian Bookmaker Access
+
+Due to geo-restrictions on Australian bookmaker sites, testing access is an important first step.
+
+### Testing Scripts
+
+All testing scripts are located in the `surebetbot/tests/` directory. To run tests, ensure you are in the project root directory.
+
+#### 1. Soccer Navigation Test
+
+This test specifically checks if we can navigate to the soccer section of bookmaker websites, simulating the "Sports > Soccer" navigation path.
+
+```bash
+python -m surebetbot.tests.test_soccer_navigation
+```
+
+This script:
+- Tries to access the Sports menu on each bookmaker site
+- Finds and clicks on Soccer links
+- Captures screenshots at each step
+- Reports if it found soccer events/competitions
+
+#### 2. Scraper Tests
+
+To test the full scraper functionality for Sportsbet:
+
+```bash
+python -m surebetbot.tests.test_scrapers
+```
+
+This runs the full scraping logic to extract events and odds, verifying that the scraper can handle the website's structure.
+
+### Results & Recommendations
+
+Based on our testing, we've found:
+
+1. **Sportsbet:** Works reliably with Firefox browser when accessed from Australia
+2. **TAB:** Has UI issues making soccer navigation difficult
+3. **Ladbrokes:** Requires additional navigation approaches
+
+**We recommend focusing on Sportsbet first** as the primary bookmaker for development and testing.
+
+### Debug Screenshots
+
+Screenshots from test runs are saved to:
+- `debug_screenshots/` - For general scraper tests
+- `debug_soccer_nav/` - For soccer navigation tests
+
+These screenshots are useful for debugging navigation issues or scraper problems.
+
+### Mock Data Testing
+
+For development or when bookmaker sites are inaccessible, use the mock data module:
+
+```bash
+python -m surebetbot.cmd.mock_test --min-profit 1.0
+```
+
+This generates artificial data to test the arbitrage logic without needing actual website access.
+
+---
+
+## 📊 Sportsbet-Focused Scraping
+
+Based on testing results, we've developed enhanced scrapers focused on Sportsbet, which has proven most reliable for Australian users.
+
+### Running the Sportsbet Scraper
+
+To scrape soccer events from Sportsbet:
+
+```bash
+python -m surebetbot.cmd.scrape_sportsbet
+```
+
+This will:
+1. Launch a Firefox browser (which works best with Sportsbet)
+2. Navigate to the soccer section
+3. Extract available soccer events, competitions, markets and odds
+4. Display the results in a readable format
+5. Save the collected data to JSON files in the `output/` directory
+
+### Soccer Navigation Testing
+
+For troubleshooting website access:
+
+```bash
+python -m surebetbot.tests.test_soccer_navigation
+```
+
+### Features of the Enhanced Sportsbet Scraper:
+
+- **Robust Navigation**: Reliably accesses the soccer section
+- **Multiple Selector Strategies**: Falls back to alternative selectors if primary ones fail
+- **Detailed Logging**: Comprehensive logging for troubleshooting
+- **Screenshot Capture**: Saves screenshots at each step for visual verification
+- **Error Resilience**: Gracefully handles errors and timeouts
+- **Clean Output**: Well-formatted results for easy analysis
+
+### Debugging
+
+Debug files are saved to:
+- `debug_screenshots/`: Contains snapshots of website navigation
+- `output/`: Contains extracted event data in JSON format
+
+---
+
 

@@ -83,13 +83,13 @@ class Event:
 
 @dataclass
 class ArbitrageOpportunity:
-    id: UUID = uuid4()
     event_description: str  # Combined event description (e.g. "Manchester United vs Liverpool")
     market_description: str  # Description of the market (e.g. "Match Winner")
     selections: List[Tuple[str, float, Bookmaker]]  # List of (selection name, odds, bookmaker)
     profit_percentage: float  # Arbitrage profit % (e.g., 2.5)
     required_investment: float  # Total stake required
     stakes: Dict[str, float]  # Stake for each selection
+    id: UUID = uuid4()
     detection_time: datetime = datetime.now()
     
     @property
