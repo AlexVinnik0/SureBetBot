@@ -36,20 +36,37 @@ def format_event(event: Event) -> str:
     lines = []
     
     lines.append(f"\n{'=' * 80}")
-    lines.append(f"EVENT: {event.home_team} vs {event.away_team}")
+    
+    # Format the event header differently based on sport type
+    if event.sport == SportType.HORSE_RACING:
+        lines.append(f"EVENT: {event.home_team} ({event.competition})")
+    else:
+        if event.away_team:
+            lines.append(f"EVENT: {event.home_team} vs {event.away_team}")
+        else:
+            lines.append(f"EVENT: {event.home_team}")
+    
     lines.append(f"{'=' * 80}")
     
-    lines.append(f"Competition: {event.competition_name}")
+    lines.append(f"Sport: {event.sport.name}")
+    lines.append(f"Competition: {event.competition}")
     lines.append(f"Start time: {event.start_time}")
     lines.append(f"URL: {event.url}")
     lines.append("")
     
     for i, market in enumerate(event.markets):
-        lines.append(f"MARKET #{i+1}: {market.name}")
+        lines.append(f"MARKET #{i+1}: {market.name} (Type: {market.type.name})")
         lines.append(f"{'-' * 60}")
         
-        for outcome in market.outcomes:
-            lines.append(f"  {outcome.name}: {outcome.odds:.2f}")
+        for j, outcome in enumerate(market.outcomes):
+            outcome_name = outcome.name
+            # If the outcome name is the same as the odds, use a better name
+            if outcome_name == str(outcome.odds):
+                if event.sport == SportType.HORSE_RACING:
+                    outcome_name = f"Runner {j+1}"
+                else:
+                    outcome_name = f"Selection {j+1}"
+            lines.append(f"  {outcome_name}: {outcome.odds:.2f}")
         
         lines.append("")
     
@@ -73,9 +90,49 @@ def save_events(events: List[Event], output_dir: str) -> str:
     filename = f"sportsbet_events_{timestamp}.json"
     filepath = os.path.join(output_dir, filename)
     
+    # Convert Event objects to dictionaries
+    events_data = []
+    for event in events:
+        # Create a dictionary representation of the event
+        event_dict = {
+            "id": event.id,
+            "sport": event.sport.name,
+            "home_team": event.home_team,
+            "away_team": event.away_team,
+            "competition": event.competition,
+            "start_time": str(event.start_time),
+            "url": event.url,
+            "bookmaker": {
+                "id": event.bookmaker.id,
+                "name": event.bookmaker.name,
+                "base_url": event.bookmaker.base_url
+            },
+            "markets": []
+        }
+        
+        # Add markets data
+        for market in event.markets:
+            market_dict = {
+                "id": market.id,
+                "name": market.name,
+                "type": market.type.name,
+                "outcomes": []
+            }
+            
+            # Add outcomes data
+            for outcome in market.outcomes:
+                market_dict["outcomes"].append({
+                    "name": outcome.name,
+                    "odds": outcome.odds
+                })
+            
+            event_dict["markets"].append(market_dict)
+        
+        events_data.append(event_dict)
+    
     with open(filepath, "w") as f:
         json.dump(
-            [event.dict() for event in events],
+            events_data,
             f,
             indent=2,
             default=str,
@@ -113,7 +170,7 @@ async def main():
     
     finally:
         # Close the scraper
-        await scraper.close()
+        await scraper.cleanup()
     
     logger.info("Sportsbet scraper completed")
 
